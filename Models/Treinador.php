@@ -2,57 +2,123 @@
 
 namespace API_Pokemon\Models;
 use PDO;
-use Throwable;
 
-class Treinador{
+class Treinador
+{
+    public $id;
+    public $nome;
+    public $genero;
+    public $idade;
+    public $cidadeOrigem;
+    public $regiao;
+    public $insignias;
 
-public $id;
-public $nome;
-public $especialidade;
+    private $db;
+    private $tabela = "Treinador";
 
-private $db;
-private $tabela = "Treinador";
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
+    
+    public function get()
+    {
+        $query = "SELECT
+                    idTreinador,
+                    nome,
+                    genero,
+                    idade,
+                    cidadeOrigem,
+                    regiao,
+                    insignias
+                  FROM " . $this->tabela . "
+                  WHERE idTreinador = ?
+                  LIMIT 1";
+                  
+                  $stmt = $this->db->prepare($query);
+                  
+                  $stmt->bindParam(1, $this->id);
+                  
+                  $stmt->execute();
+                  
+                  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                  
+                  if ($row) {
+                      $this->nome = $row['nome'];
+                      $this->genero = $row['genero'];
+                      $this->idade = $row['idade'];
+                      $this->cidadeOrigem = $row['cidadeOrigem'];
+                      $this->regiao = $row['regiao'];
+                      $this->insignias = $row['insignias'];
+                      }
+                      }
+                    
 
-public function __construct($db){
-    $this->db = $db;
-}
+    public function getall()
+    {
+        $query = "SELECT
+                    idTreinador,
+                    nome,
+                    genero,
+                    idade,
+                    cidadeOrigem,
+                    regiao,
+                    insignias
+                  FROM " . $this->tabela;
 
-public function getall(){
-    $query = "SELECT id, nome, elemento, ponto_forca, ponto_velocidade, ponto_vida FROM " . $this->tabela;
-
-    $stmt = $this->db->prepare($query);
-    $stmt->execute();
-
-    return $stmt;
-}
-
-public function get(){
-
-        $query = 'SELECT
-                p.id,
-                p.nome,
-                p.elemento,
-                p.ponto_forca,
-                p.ponto_velocidade,
-                p.ponto_vida
-            FROM
-                ' . $this->tabela . ' p
-            WHERE
-                p.id = ?    
-            LIMIT 1';
- 
         $stmt = $this->db->prepare($query);
- 
-        $stmt->bindParam(1, $this->id);
-       
         $stmt->execute();
- 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
- 
-        $this->nome = $row['nome'];
-        $this->elemento = $row['elemento'];
-        $this->ponto_forca = $row['ponto_forca'];
-        $this->ponto_velocidade = $row['ponto_velocidade'];
-        $this->ponto_vida = $row['ponto_vida'];
-}
+
+        return $stmt;
+    }
+                          
+public function add()
+    {
+        $query = 'INSERT INTO ' . $this->tabela . ' (idTreinador, nome, genero, idade, cidadeOrigem, regiao, insignias) ' .
+            ' VALUES (:id, :nome, :genero, :idade, :cidadeOrigem, :regiao, :insignias)';
+
+        // Preparar a query
+        $stmt = $this->db->prepare($query);
+
+        // Vincular os parâmetros
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':nome', $this->nome);
+        $stmt->bindParam(':genero', $this->genero);
+        $stmt->bindParam(':idade', $this->idade);
+        $stmt->bindParam(':cidadeOrigem', $this->cidadeOrigem);
+        $stmt->bindParam(':regiao', $this->regiao);
+        $stmt->bindParam(':insignias', $this->insignias);
+
+        // Executar a query
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+         public function update(){
+
+     // Query de atualização
+            $query = 'UPDATE ' . $this->tabela. ' SET nome=:nome, genero=:genero, idade=:idade, cidadeOrigem=:cidadeOrigem, regiao=:regiao, insignias=:insignias WHERE idTreinador=:id';
+   
+            // Preparar a query
+            $stmt = $this->db->prepare($query);
+                 
+            // Vincular os parâmetros
+            $stmt->bindParam(':nome', $this->nome);
+            $stmt->bindParam(':genero', $this->genero);
+            $stmt->bindParam(':idade', $this->idade);
+            $stmt->bindParam(':cidadeOrigem', $this->cidadeOrigem);
+            $stmt->bindParam(':regiao', $this->regiao);
+            $stmt->bindParam(':insignias', $this->insignias);
+            $stmt->bindParam(':id', $this->id);
+   
+            // Executar a query
+            if($stmt->execute()) {
+                return true;
+            }
+         
+            return false;
+
+    }
 }

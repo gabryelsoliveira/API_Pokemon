@@ -1,6 +1,6 @@
 <?php
 
-namespace API_Pizzaria\Config;
+namespace API_Pokemon\Config;
 use PDO;
 use PDOException;
 use Throwable;
