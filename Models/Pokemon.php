@@ -162,7 +162,7 @@ public function add()
     public function getPokemonsTreinador(){
  
     $query = "SELECT
-        numPokedex,
+        idPokemon,
         nome
         FROM pokemon
         WHERE idTreinador = :id";
@@ -181,7 +181,6 @@ public function add()
  
     $query = "SELECT
         idPokemon,
-        numPokedex,
         nome,
         velocidade
         FROM pokemon
@@ -197,12 +196,11 @@ public function add()
 
     public function getPokemonsAtaque(){
         $query = "SELECT
-            idPokemon,
-            numPokedex,
+            idPokemon,  
             nome,
-            ataque
+            forca
             FROM pokemon
-            order by ataque DESC
+            order by forca DESC
             limit 5";
  
         $stmt = $this->db->prepare($query);
@@ -214,11 +212,10 @@ public function add()
     public function getPokemonsDefesa(){
         $query = "SELECT
             idPokemon,
-            numPokedex,
             nome,
-            defesa
+            resistencia
             FROM pokemon
-            order by defesa DESC
+            order by resistencia DESC
             limit 5";
  
         $stmt = $this->db->prepare($query);

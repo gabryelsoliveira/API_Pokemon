@@ -17,7 +17,7 @@ $db = $database->getConnection();
  
 $pokemon = new Pokemon($db);
  
-$stmt = $pokemon->getPokemonsDefesa();
+$stmt = $pokemon->getPokemonsAtaque();
  
 $pokemon = [];
  
@@ -27,7 +27,7 @@ while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
     $pokemon[] = [
         "idPokemon" => $idPokemon,
         "nome" => $nome,
-        "defesa" => $defesa
+        "forca" => $forca
     ];
 }
  
