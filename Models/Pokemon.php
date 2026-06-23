@@ -123,4 +123,108 @@ public function add()
             return false;
 
     }
+    public function delete(){
+        // Query de exclusão
+        $query = 'DELETE FROM ' . $this->tabela . ' WHERE idPokemon = :id';
+ 
+        // Preparar a query
+        $stmt = $this->db->prepare($query);
+ 
+        // Vincular o ID
+        $stmt->bindParam(':id', $this->id);
+ 
+        // Executar a query
+        if ($stmt->execute()) {
+            return true;
+        }
+         
+        return false;
+    }
+
+    public function getTreinador(){  //VAI NO BANCO DE DADOS E TRAZ O TREINADOR ASSOCIADO A POKEMON COM O ID ESPECIFICADO
+    $query = 'SELECT
+    t.idTreinador,
+    t.nome AS Treinador
+    FROM treinador t
+    WHERE t.idTreinador = :id';
+ 
+        $stmt = $this->db->prepare($query);
+ 
+        $this->idTreinador=htmlspecialchars(strip_tags($this->idTreinador));
+ 
+        $stmt->bindParam(':id', $this->idTreinador);
+ 
+        $stmt->execute();
+ 
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+ 
+    public function getPokemonsTreinador(){
+ 
+    $query = "SELECT
+        numPokedex,
+        nome
+        FROM pokemon
+        WHERE idTreinador = :id";
+ 
+    $stmt = $this->db->prepare($query);
+ 
+    $stmt->bindParam(':id', $this->idTreinador);
+ 
+    $stmt->execute();
+ 
+    return $stmt;
+ 
+    }
+
+    public function getPokemonsVelozes(){
+ 
+    $query = "SELECT
+        idPokemon,
+        numPokedex,
+        nome,
+        velocidade
+        FROM pokemon
+        order by velocidade DESC
+        limit 5";
+ 
+    $stmt = $this->db->prepare($query);
+    $stmt->execute();
+ 
+    return $stmt;
+ 
+    }
+
+    public function getPokemonsAtaque(){
+        $query = "SELECT
+            idPokemon,
+            numPokedex,
+            nome,
+            ataque
+            FROM pokemon
+            order by ataque DESC
+            limit 5";
+ 
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+ 
+        return $stmt;
+ 
+    }
+    public function getPokemonsDefesa(){
+        $query = "SELECT
+            idPokemon,
+            numPokedex,
+            nome,
+            defesa
+            FROM pokemon
+            order by defesa DESC
+            limit 5";
+ 
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+ 
+        return $stmt;
+ 
+    }
 }
