@@ -51,6 +51,7 @@ public function get(){
  
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
  
+        if($row){
         $this->nome = $row['nome'];
         $this->tipo = $row['tipo'];
         $this->fraqueza = $row['fraqueza'];
@@ -61,6 +62,10 @@ public function get(){
         $this->genero = $row['genero'];
         $this->idTreinador = $row['idTreinador'];
 }       
+{
+    $this->nome = null;
+}
+}
     public function getall(){
     $query = "SELECT idPokemon, nome, tipo, fraqueza, forca, velocidade, vida, resistencia, genero, idTreinador FROM " . $this->tabela;
 
